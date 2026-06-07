@@ -1,0 +1,177 @@
+name: CI
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Build and run the full test suite under ASan + UBSan on Linux and macOS.
+  # ---------------------------------------------------------------------------
+  test:
+    name: "Test (${{ matrix.os }})"
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            sanitize: address,undefined
+          - os: macos-latest
+            sanitize: address
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install Meson and Ninja
+        run: python -m pip install --upgrade meson ninja
+
+      - name: Configure (debug + tests + sanitizers)
+        run: >
+          meson setup build
+          --buildtype=debug
+          -Dbuild_tests=true
+          -Db_sanitize=${{ matrix.sanitize }}
+
+      - name: Build
+        run: meson compile -C build
+
+      - name: Test
+        run: meson test -C build --verbose
+
+      - name: Upload test log
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: testlog-${{ matrix.os }}
+          path: build/meson-logs/testlog.txt
+
+  # ---------------------------------------------------------------------------
+  # Verify the core links no floating-point ABI symbols. The double<->fxp
+  # helpers are excluded (-Dwith_convert=false); the resulting core archive
+  # must be float-free so the library is usable under -mfloat-abi=soft.
+  # ---------------------------------------------------------------------------
+  float-free-core:
+    name: "Float-free core (nm-gate)"
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install Meson and Ninja
+        run: python -m pip install --upgrade meson ninja
+
+      - name: Configure (core only, no convert)
+        run: >
+          meson setup build
+          --buildtype=release
+          -Dbuild_tests=false
+          -Dwith_convert=false
+
+      - name: Build
+        run: meson compile -C build
+
+      - name: Assert no float ABI symbols in the core
+        run: |
+          obj=build/libfxp.a.p/src_fxp.c.o
+          echo "Scanning $obj for floating-point ABI symbols..."
+          if nm "$obj" | grep -iE '__aeabi_(f|d)|__float|__fix(uns)?df|__fix(uns)?sf|__mul(df|sf)|__div(df|sf)|__add(df|sf)|softfloat'; then
+            echo "ERROR: floating-point symbols found in the core." >&2
+            exit 1
+          fi
+          echo "OK: core is float-free."
+
+  # ---------------------------------------------------------------------------
+  # Verify the library compiles cleanly in release mode (no tests, no
+  # sanitizers) - the configuration a downstream project would use.
+  # ---------------------------------------------------------------------------
+  release-build:
+    name: "Release build"
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install Meson and Ninja
+        run: python -m pip install --upgrade meson ninja
+
+      - name: Configure (release)
+        run: >
+          meson setup build
+          --buildtype=release
+          -Dbuild_tests=false
+
+      - name: Build
+        run: meson compile -C build
+
+  # ---------------------------------------------------------------------------
+  # Code coverage gate. Builds with gcov instrumentation, runs the full test
+  # suite, and fails if line or branch coverage drops below the threshold.
+  # ---------------------------------------------------------------------------
+  coverage:
+    name: "Coverage gate"
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install ninja
+        run: sudo apt-get update -q && sudo apt-get install -y ninja-build
+
+      - name: Install Meson and gcovr
+        run: python -m pip install --upgrade meson gcovr
+
+      - name: Configure (coverage)
+        run: >
+          meson setup build
+          --buildtype=debug
+          -Dbuild_tests=true
+          -Db_coverage=true
+
+      - name: Build
+        run: meson compile -C build
+
+      - name: Run tests
+        run: meson test -C build --verbose
+
+      - name: Generate coverage report
+        run: |
+          mkdir -p coverage-report
+          gcovr \
+            --root . \
+            --filter 'src/' \
+            --filter 'include/' \
+            --html-details coverage-report/index.html \
+            --txt coverage-report/summary.txt \
+            --print-summary \
+            --fail-under-line 80 \
+            --fail-under-branch 70
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage-report/

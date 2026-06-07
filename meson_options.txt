@@ -1,0 +1,13 @@
+option(
+  'build_tests',
+  type: 'boolean',
+  value: true,
+  description: 'Build and run unit tests',
+)
+
+option(
+  'with_convert',
+  type: 'boolean',
+  value: true,
+  description: 'Build the optional double<->fxp conversion helpers (fxp_convert.c). Disable for strictly float-free targets.',
+)
