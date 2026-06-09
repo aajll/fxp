@@ -6,35 +6,7 @@ A portable, integer-only fixed-point arithmetic kernel for embedded C.
 
 fxp provides the deterministic math that fixed-point code otherwise hand-rolls: saturating and checked add/sub/mul/div, fused multiply-divide, a wide multiply-accumulate, format rescaling, clamping, interpolation, and conversion. One audited rounding policy is applied everywhere.
 
-For example, a fixed-point dot product (a FIR tap, a weighted sum) means a wide accumulator, a rounding step, and a saturating narrow. By hand, each is a place to get the scale, the sign of the rounding, or an overflow guard subtly wrong:
-
-```c
-/* y = sum(coeff[i] * x[i]) over Q16.16 inputs */
-int64_t acc = 0;
-for (size_t i = 0; i < n; i++) {
-        acc += (int64_t)coeff[i] * (int64_t)x[i];
-}
-acc = (acc + (1 << 15)) >> 16; /* round to nearest, Q32.32 -> Q16.16 */
-int32_t y;
-if (acc > INT32_MAX) {
-        y = INT32_MAX; /* saturate */
-} else if (acc < INT32_MIN) {
-        y = INT32_MIN;
-} else {
-        y = (int32_t)acc;
-}
-```
-
-With fxp, the wide accumulate, the rounding policy, and the saturation are the library's job:
-
-```c
-/* coeff[] and x[] are fxp_t */
-fxp_acc_t acc = fxp_acc_zero();
-for (size_t i = 0; i < n; i++) {
-        acc = fxp_acc_mac(acc, coeff[i], x[i]);
-}
-fxp_t y = fxp_acc_narrow_sat(acc);
-```
+For a detailed guide on the design philosophy, arithmetic hot paths, and common patterns (like dot products/FIR filters), see the [FXP Guide](docs/FXP_GUIDE.md).
 
 ## Features
 
