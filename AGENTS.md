@@ -60,6 +60,13 @@ meson test -C build --verbose
 - **Use `fxp_wide_t` intermediates** for multiply/scale and saturate before narrowing; special-case `FXP_MIN` in negate/abs/divide.
 - The default format (Q16.16) and rounding (ties-to-even) are part of the public contract — changing them is a breaking change.
 
+### Comment placement (Doxygen)
+
+- Inline trailing annotations (`/**< ... */`) on `enum`/`struct` members are allowed only when the resulting line fits the 80-column limit.
+- If any member's annotation would overrun, move **all** of that aggregate's member docs into a single structured Doxygen block above the type, as an `@details` list of `- ::SYMBOL  description` entries.
+- Never mix inline and block forms within one aggregate, and never leave a trailing comment that clang-format would wrap onto a second line.
+- After editing, verify with a `clang-format --style=file` no-reformat diff and an 80-column scan.
+
 ### Testing
 
 - Run `meson test -C build` after changes.
