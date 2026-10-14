@@ -75,4 +75,4 @@ Keep the subject under ~70 characters. Use the body to explain _why_.
 
 - Open an issue first for non-trivial changes so the design can be agreed.
 - Keep PRs focused: one feature or one fix per PR.
-- All CI checks must pass: tests on Linux + macOS, ASan + UBSan, the nm-gate, the release build, and the coverage gate.
+- All CI checks must pass: tests under ASan + UBSan, the nm-gate, the release build, and the coverage gate.

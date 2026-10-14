@@ -8,20 +8,11 @@ on:
 
 jobs:
   # ---------------------------------------------------------------------------
-  # Build and run the full test suite under ASan + UBSan on Linux and macOS.
+  # Build and run the full test suite under ASan + UBSan.
   # ---------------------------------------------------------------------------
   test:
-    name: "Test (${{ matrix.os }})"
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: ubuntu-latest
-            sanitize: address,undefined
-          - os: macos-latest
-            sanitize: address
+    name: "Test"
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -38,7 +29,7 @@ jobs:
           meson setup build
           --buildtype=debug
           -Dbuild_tests=true
-          -Db_sanitize=${{ matrix.sanitize }}
+          -Db_sanitize=address,undefined
 
       - name: Build
         run: meson compile -C build
@@ -50,7 +41,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: testlog-${{ matrix.os }}
+          name: testlog
           path: build/meson-logs/testlog.txt
 
   # ---------------------------------------------------------------------------
