@@ -152,7 +152,7 @@ int   fxp_cmp(fxp_t a, fxp_t b);
 ### Format conversion
 
 ```c
-enum fxp_status fxp_rescale(fxp_t a, uint8_t from_frac, uint8_t to_frac, fxp_t *out);
+enum fxp_status fxp_rescale(fxp_t a, uint_least8_t from_frac, uint_least8_t to_frac, fxp_t *out);
 ```
 
 ### Floating-point conversion (optional)

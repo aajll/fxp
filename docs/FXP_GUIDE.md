@@ -695,8 +695,8 @@ biquad calculator) and stored as `FXP_C(...)` constants in flash.
 ### 7.1 `fxp_rescale` — Converting Between Q-Formats
 
 ```c
-enum fxp_status fxp_rescale(fxp_t a, uint8_t from_frac, uint8_t to_frac,
-                            fxp_t *out);
+enum fxp_status fxp_rescale(fxp_t a, uint_least8_t from_frac,
+                            uint_least8_t to_frac, fxp_t *out);
 ```
 
 Converts a value from one fractional bit count to another. This is useful when
@@ -1266,7 +1266,7 @@ Here's a complete FIR filter implementation using `fxp`:
 typedef struct {
     fxp_t coefficients[FIR_TAPS];
     fxp_t delay_line[FIR_TAPS];
-    uint8_t write_index;
+    uint_least8_t write_index;
 } fir_filter_t;
 
 // Initialize filter with pre-computed coefficients
