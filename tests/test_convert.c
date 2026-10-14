@@ -46,6 +46,15 @@ TEST_CASE(test_double_overflow)
         TEST_ASSERT(st == FXP_OVERFLOW);
         TEST_ASSERT(fxp_from_double(-1.0e9, &st) == FXP_MIN);
         TEST_ASSERT(st == FXP_OVERFLOW);
+
+        /* NULL status accepted on the overflow paths */
+        TEST_ASSERT(fxp_from_double(1.0e9, NULL) == FXP_MAX);
+        TEST_ASSERT(fxp_from_double(-1.0e9, NULL) == FXP_MIN);
+
+        /* An in-range value reports FXP_OK */
+        st = FXP_OVERFLOW;
+        TEST_ASSERT(fxp_from_double(1.5, &st) == FXP_C(3, 2));
+        TEST_ASSERT(st == FXP_OK);
 }
 
 /*

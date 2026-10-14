@@ -28,7 +28,9 @@
  * @brief Arithmetic right shift of @p v by @p s bits, applying @c FXP_ROUNDING.
  *
  * Reference point is the floor (arithmetic `>>`), so the fractional remainder
- * is always in [0, 2^s). Shared by every shift-based narrowing.
+ * is always in [0, 2^s). Shared by every shift-based narrowing. Callers pass
+ * 0 < @p s < FXP_WIDE_BITS: @c FXP_FRAC_BITS, or the distance of a rescale
+ * that reduces the fractional bits.
  */
 static fxp_wide_t
 fxp_shr_round(fxp_wide_t v, unsigned int s)
@@ -38,10 +40,6 @@ fxp_shr_round(fxp_wide_t v, unsigned int s)
 #if FXP_ROUNDING != FXP_ROUND_TRUNCATE
         fxp_wide_t half;
 #endif
-
-        if (s == 0U) {
-                return v;
-        }
 
         q = v >> s;
         /* Mask, not `q << s`: left-shifting a negative signed value is UB. For

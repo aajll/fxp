@@ -53,6 +53,7 @@ TEST_CASE(test_from_ratio)
         TEST_ASSERT(st == FXP_DIV_ZERO);
         /* NULL status accepted */
         TEST_ASSERT(fxp_from_ratio(3, 1, NULL) == FXP_INT(3));
+        TEST_ASSERT(fxp_from_ratio(1, 0, NULL) == 0);
 }
 
 TEST_CASE(test_floor_ceil_round)
@@ -237,6 +238,14 @@ TEST_CASE(test_clamp_wide)
             fxp_clamp_wide((fxp_wide_t)FXP_MIN * 4, FXP_MIN, FXP_MAX, &clamped)
             == FXP_MIN);
         TEST_ASSERT(clamped == true);
+
+        /* NULL flag accepted on every path */
+        TEST_ASSERT(
+            fxp_clamp_wide((fxp_wide_t)FXP_MAX * 4, FXP_MIN, FXP_MAX, NULL)
+            == FXP_MAX);
+        TEST_ASSERT(
+            fxp_clamp_wide((fxp_wide_t)FXP_MIN * 4, FXP_MIN, FXP_MAX, NULL)
+            == FXP_MIN);
 
         /* NULL flag accepted */
         TEST_ASSERT(fxp_clamp_wide((fxp_wide_t)FXP_INT(5), FXP_INT(0),
