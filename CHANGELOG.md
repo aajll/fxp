@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- The README is a short landing page. `docs/integration.md`, `docs/api.md` and `docs/design.md` replace `docs/FXP_GUIDE.md`, and a test compiles every C example in the documentation.
 - CI installs Meson, Ninja and gcovr with `uv` instead of `pip` and `apt`.
 - CI gates line and branch coverage at 100 %, up from 80 % line and 70 % branch.
 - The zero-distance check in the internal shift-rounding helper is removed: every caller passes a positive distance. Results are unchanged.
