@@ -8,10 +8,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- CI runs MISRA C:2023 analysis with `misch` and fails on any finding outside the baseline recorded in `analysis/baseline/`.
+- `scripts/format.sh`, which pins the clang-format release and runs it with `uvx`. CI checks formatting through it.
 - The test suite builds the core under each rounding mode (`FXP_ROUND_TRUNCATE`, `FXP_ROUND_NEAREST_UP` and `FXP_ROUND_NEAREST_EVEN`) and checks every narrowing path against the expected result for ties, non-ties and exact values of both signs, with positive and negative divisors.
 
 ### Changed
 
+- CI installs Meson, Ninja and gcovr with `uv` instead of `pip` and `apt`.
 - CI gates line and branch coverage at 100 %, up from 80 % line and 70 % branch.
 - The zero-distance check in the internal shift-rounding helper is removed: every caller passes a positive distance. Results are unchanged.
 
