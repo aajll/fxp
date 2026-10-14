@@ -31,7 +31,7 @@ gcovr --root . --filter 'src/' --filter 'include/' --print-summary
 ## C language rules
 
 - C11 only (uses `_Static_assert`).
-- Use fixed-width types from `<stdint.h>` and `<stdbool.h>`.
+- Use fixed-width types from `<stdint.h>` and `<stdbool.h>`. For byte-sized values use `uint_least8_t` or `int_least8_t`, never `uint8_t` or `int8_t`: C11 does not provide the exact 8-bit types where `CHAR_BIT == 16`, and CI's TI C2000 job fails on them.
 - No heap allocation (`malloc`, `free`, VLAs). The library has no global state; keep all functions pure and reentrant.
 - Pointer-argument policy: a required `out` result pointer on a `_chk` function is a documented precondition (`@pre out != NULL`) — not runtime-checked, so the hot path stays branch-free. Optional status/flag pointers (`st`, `clamped`, `overflow`) must be NULL-tolerant. Keep new APIs consistent with this split.
 - **No floating point in the core.** Only `src/fxp_convert.c` may reference `double`. CI's nm-gate fails the build if any float ABI symbol appears in the core object. New float code belongs in the convert translation unit.
