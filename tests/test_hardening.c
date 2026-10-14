@@ -45,6 +45,27 @@ TEST_CASE(test_rescale_upscale_saturates)
         /* small value, exact up-scale */
         TEST_ASSERT(fxp_rescale(FXP_INT(1), 16, 20, &out) == FXP_OK);
         TEST_ASSERT(out == (fxp_t)((fxp_wide_t)FXP_INT(1) * 16));
+        /* small negative value, exact up-scale */
+        TEST_ASSERT(fxp_rescale(FXP_INT(-1), 16, 20, &out) == FXP_OK);
+        TEST_ASSERT(out == (fxp_t)((fxp_wide_t)FXP_INT(-1) * 16));
+        /* the largest magnitudes that fit, and one beyond, of each sign */
+        TEST_ASSERT(fxp_rescale(FXP_MAX >> 4, 16, 20, &out) == FXP_OK);
+        TEST_ASSERT(out == (fxp_t)((fxp_wide_t)(FXP_MAX >> 4) * 16));
+        TEST_ASSERT(fxp_rescale((FXP_MAX >> 4) + 1, 16, 20, &out)
+                    == FXP_SATURATED);
+        TEST_ASSERT(out == FXP_MAX);
+        TEST_ASSERT(fxp_rescale(FXP_MIN / 16, 16, 20, &out) == FXP_OK);
+        TEST_ASSERT(out == FXP_MIN);
+        TEST_ASSERT(fxp_rescale((FXP_MIN / 16) - 1, 16, 20, &out)
+                    == FXP_SATURATED);
+        TEST_ASSERT(out == FXP_MIN);
+        /* an up-scale by the whole word overflows any nonzero value */
+        TEST_ASSERT(fxp_rescale(FXP_RAW(1), 0, FXP_WORD_BITS, &out)
+                    == FXP_SATURATED);
+        TEST_ASSERT(out == FXP_MAX);
+        TEST_ASSERT(fxp_rescale(FXP_RAW(-1), 0, FXP_WORD_BITS, &out)
+                    == FXP_SATURATED);
+        TEST_ASSERT(out == FXP_MIN);
 }
 
 TEST_CASE(test_rescale_downscale)

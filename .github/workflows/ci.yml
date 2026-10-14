@@ -114,7 +114,7 @@ jobs:
 
   # ---------------------------------------------------------------------------
   # Code coverage gate. Builds with gcov instrumentation, runs the full test
-  # suite, and fails if line or branch coverage drops below the threshold.
+  # suite, and fails unless line and branch coverage reach 100 %.
   # ---------------------------------------------------------------------------
   coverage:
     name: "Coverage gate"
@@ -157,8 +157,8 @@ jobs:
             --html-details coverage-report/index.html \
             --txt coverage-report/summary.txt \
             --print-summary \
-            --fail-under-line 80 \
-            --fail-under-branch 70
+            --fail-under-line 100 \
+            --fail-under-branch 100
 
       - name: Upload coverage report
         if: always()

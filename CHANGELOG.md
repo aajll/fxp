@@ -10,6 +10,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - The test suite builds the core under each rounding mode (`FXP_ROUND_TRUNCATE`, `FXP_ROUND_NEAREST_UP` and `FXP_ROUND_NEAREST_EVEN`) and checks every narrowing path against the expected result for ties, non-ties and exact values of both signs, with positive and negative divisors.
 
+### Changed
+
+- CI gates line and branch coverage at 100 %, up from 80 % line and 70 % branch.
+- The zero-distance check in the internal shift-rounding helper is removed: every caller passes a positive distance. Results are unchanged.
+
 ### Fixed
 
 - `fxp_rescale` takes its fractional-bit counts as `uint_least8_t` instead of `uint8_t`, so the library compiles on targets with `CHAR_BIT == 16`, where C11 does not provide `uint8_t`. Where `uint8_t` exists the two are the same type, so callers need no change.
