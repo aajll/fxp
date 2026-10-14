@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+
 # Unit-test suite. Each file is its own executable and is registered with
 # test() so `meson test` runs them all.
 

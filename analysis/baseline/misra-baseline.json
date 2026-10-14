@@ -1,0 +1,83 @@
+{
+  "schema": "misch/baseline@2",
+  "fingerprints": {
+    "06002814634f": {
+      "rule_id": "misra-c2012-10.7",
+      "file": "src/fxp.c",
+      "message": "misra violation (use --rule-texts=<file> to get proper output)",
+      "count": 1
+    },
+    "0c43ea1bd5f2": {
+      "rule_id": "misra-c2012-5.6",
+      "file": "include/fxp_config.h",
+      "message": "misra violation (use --rule-texts=<file> to get proper output)",
+      "count": 4
+    },
+    "272937fb7b1a": {
+      "rule_id": "misra-c2012-8.7",
+      "file": "src/fxp_convert.c",
+      "message": "misra violation (use --rule-texts=<file> to get proper output)",
+      "count": 2
+    },
+    "2a5a318c7d32": {
+      "rule_id": "misra-c2012-10.1",
+      "file": "src/fxp_convert.c",
+      "message": "misra violation (use --rule-texts=<file> to get proper output)",
+      "count": 6
+    },
+    "387aa5432950": {
+      "rule_id": "misra-c2012-5.9",
+      "file": "src/fxp.c",
+      "message": "misra violation (use --rule-texts=<file> to get proper output)",
+      "count": 3
+    },
+    "4922161cb6c8": {
+      "rule_id": "misra-c2012-15.5",
+      "file": "src/fxp.c",
+      "message": "misra violation (use --rule-texts=<file> to get proper output)",
+      "count": 27
+    },
+    "51f8a779102d": {
+      "rule_id": "misra-c2012-10.4",
+      "file": "src/fxp.c",
+      "message": "misra violation (use --rule-texts=<file> to get proper output)",
+      "count": 3
+    },
+    "55b8cd1d63a8": {
+      "rule_id": "misra-c2012-10.1",
+      "file": "include/fxp_config.h",
+      "message": "misra violation (use --rule-texts=<file> to get proper output)",
+      "count": 1
+    },
+    "614ca46de9b1": {
+      "rule_id": "misra-c2012-17.8",
+      "file": "src/fxp.c",
+      "message": "misra violation (use --rule-texts=<file> to get proper output)",
+      "count": 5
+    },
+    "6856b0ebaefe": {
+      "rule_id": "misra-c2012-15.5",
+      "file": "src/fxp_convert.c",
+      "message": "misra violation (use --rule-texts=<file> to get proper output)",
+      "count": 2
+    },
+    "ab129372dbe1": {
+      "rule_id": "misra-c2012-10.1",
+      "file": "src/fxp.c",
+      "message": "misra violation (use --rule-texts=<file> to get proper output)",
+      "count": 36
+    },
+    "c8ea2b1e5b1e": {
+      "rule_id": "misra-c2012-2.5",
+      "file": "include/fxp_const.h",
+      "message": "misra violation (use --rule-texts=<file> to get proper output)",
+      "count": 3
+    },
+    "fd575745befe": {
+      "rule_id": "misra-c2012-10.8",
+      "file": "src/fxp.c",
+      "message": "misra violation (use --rule-texts=<file> to get proper output)",
+      "count": 2
+    }
+  }
+}
