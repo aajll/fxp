@@ -466,7 +466,7 @@ fxp_cmp(fxp_t a, fxp_t b)
 /* ================ FORMAT CONVERSION ==================================== */
 
 enum fxp_status
-fxp_rescale(fxp_t a, uint8_t from_frac, uint8_t to_frac, fxp_t *out)
+fxp_rescale(fxp_t a, uint_least8_t from_frac, uint_least8_t to_frac, fxp_t *out)
 {
         /* Reject out-of-domain shift distances up front: a shift >= the wide
          * type width is undefined behaviour, and on common hardware is silently

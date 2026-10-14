@@ -57,6 +57,7 @@ meson test -C build --verbose
 - **No floating point in the core.** Only `src/fxp_convert.c` may use `double`. CI's nm-gate fails if any float ABI symbol appears in `fxp.c`'s object.
 - **One rounding policy, build-wide.** Every narrowing (`mul`, `div`, `muldiv`, accumulator narrow, rescale-down, `to_int`) must route through the shared `fxp_shr_round` / `fxp_div_round` helpers. Never add a bare `>>` or `/` that rounds inconsistently.
 - **Never left-shift a negative signed value** (UB). Multiply by `FXP_ONE` and take remainders with a mask, as the existing code does.
+- **No exact 8-bit types.** Use `uint_least8_t` / `int_least8_t`; `uint8_t` does not exist where `CHAR_BIT == 16`. CI cross-compiles with TI's C2000 tools to enforce it.
 - **Use `fxp_wide_t` intermediates** for multiply/scale and saturate before narrowing; special-case `FXP_MIN` in negate/abs/divide.
 - The default format (Q16.16) and rounding (ties-to-even) are part of the public contract — changing them is a breaking change.
 

@@ -16,6 +16,7 @@ For a detailed guide on the design philosophy, arithmetic hot paths, and common 
 - **One build-wide rounding policy** — round to nearest, ties to even (default), applied uniformly to every narrowing path. No floor-vs-truncate surprises.
 - **Saturating _and_ checked flavours** — `_sat` clamps and returns; `_chk` reports `FXP_SATURATED` / `FXP_DIV_ZERO` / `FXP_INEXACT` through a status code.
 - **Build-time format** — default signed Q16.16, overridable via `fxp_conf.h`.
+- **Portable to 16-bit-MAU targets** — builds where `CHAR_BIT == 16` and `int` is 16 bits; CI cross-compiles with TI's C2000 code generation tools under both object ABIs.
 - **Deterministic** — bit-identical results across compilers and optimisation levels; all loops bounded; config invariants enforced with `_Static_assert`.
 
 ## Requirements
@@ -152,7 +153,7 @@ int   fxp_cmp(fxp_t a, fxp_t b);
 ### Format conversion
 
 ```c
-enum fxp_status fxp_rescale(fxp_t a, uint8_t from_frac, uint8_t to_frac, fxp_t *out);
+enum fxp_status fxp_rescale(fxp_t a, uint_least8_t from_frac, uint_least8_t to_frac, fxp_t *out);
 ```
 
 ### Floating-point conversion (optional)
