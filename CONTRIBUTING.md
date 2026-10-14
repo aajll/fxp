@@ -49,7 +49,7 @@ This is a math kernel; the bar for arithmetic changes is high.
 
 - Add a test for every bug fix and every new operation.
 - Prefer exhaustive or swept tests over spot checks where the domain allows; the double-oracle in `tests/test_convert.c` is the model.
-- New rounding behaviour must be checked on negative values and tie points.
+- New rounding behaviour must be checked on negative values and tie points, under every rounding mode. `tests/test_rounding_modes.c` runs against a core build per mode; add a narrowing path to its table.
 - CI enforces an 80% line / 70% branch coverage gate. New code without tests will fail it.
 - Tests live in `tests/test_*.c` and must be registered with `test()` in `tests/meson.build`.
 

@@ -55,3 +55,34 @@ test_format16 = executable(
   c_args: fxp16_args,
 )
 test('format16', test_format16)
+
+# Every narrowing path under each rounding mode. The default library is built
+# with FXP_ROUND_NEAREST_EVEN; the other modes get a core build of their own.
+test_rounding_modes = executable(
+  'test_rounding_modes',
+  files('test_rounding_modes.c'),
+  dependencies: [fxp_dep],
+  include_directories: [public_headers, generated_headers],
+)
+test('rounding_modes_nearest_even', test_rounding_modes)
+
+foreach mode : ['TRUNCATE', 'NEAREST_UP']
+  mode_args = ['-DFXP_ROUNDING=FXP_ROUND_' + mode]
+  mode_lib = static_library(
+    'fxp_round_' + mode.to_lower(),
+    files('../src/fxp.c'),
+    include_directories: [public_headers, generated_headers],
+    c_args: mode_args,
+    install: false,
+  )
+  test(
+    'rounding_modes_' + mode.to_lower(),
+    executable(
+      'test_rounding_modes_' + mode.to_lower(),
+      files('test_rounding_modes.c'),
+      link_with: mode_lib,
+      include_directories: [public_headers, generated_headers],
+      c_args: mode_args,
+    ),
+  )
+endforeach
