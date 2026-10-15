@@ -61,8 +61,6 @@ The headers install to an `fxp/` subdirectory, and the `pkg-config` flags add th
 #include "fxp.h"
 ```
 
-`fxp_version.h` is installed beside it as a deprecated header that includes `fxp.h`.
-
 ## Configuration
 
 The format and rounding policy are macros with defaults in `fxp_conf.h`. Define them with `-D`, or before the first include of any `fxp` header, identically for the library sources and every file that includes `fxp.h`. The library is built for one format; to mix formats, convert at the boundary with `fxp_rescale`.

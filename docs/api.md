@@ -252,15 +252,6 @@ double back = fxp_to_double(FXP_C(-7, 2));     /* -3.5 */
 (void)pi; (void)big; (void)back;
 ```
 
-## Version
-
-<!-- snippet: skip -->
-```c
-#include "fxp_version.h"  /* Meson builds only */
-```
-
-The generated header defines `FXP_VERSION` and `FXP_VERSION_STRING` as the version string, and `FXP_VERSION_MAJOR`, `FXP_VERSION_MINOR` and `FXP_VERSION_PATCH` as integers.
-
 ## Recipes
 
 ### FIR filter
@@ -377,4 +368,4 @@ With `ki` of 0.5, limits of ±100 and a constant error of 150, the output is 75 
 #endif
 ```
 
-`FXP_VERSION_STRING` is the same string as `FXP_VERSION`. `fxp_version.h` is a deprecated header that includes `fxp.h`, kept so existing includes compile until the next major release.
+`FXP_VERSION_STRING` is the same string as `FXP_VERSION`.

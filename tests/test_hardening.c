@@ -13,7 +13,6 @@
  */
 
 #include "fxp.h"
-#include "fxp_version.h"
 #include "test_fxp.h"
 
 /* ================ fxp_rescale domain / overflow ========================= */
@@ -133,7 +132,7 @@ TEST_CASE(test_acc_mac_chk_no_false_positive)
         TEST_ASSERT(fxp_acc_narrow_sat(acc) == FXP_INT(1));
 }
 
-/* The deprecated version header still exposes the macros from fxp.h. */
+/* The version number agrees with its parts. */
 TEST_CASE(test_version_macros)
 {
         TEST_ASSERT(FXP_VERSION_NUMBER
