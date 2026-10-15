@@ -109,4 +109,4 @@ CI runs the suite under AddressSanitizer and UndefinedBehaviorSanitizer, gates `
 
 CI compiles the library with warnings as errors under TI C2000 Code Generation Tools 22.6.2.LTS and 25.11.1.LTS in C11 C28x mode, under both the COFF and EABI ABIs. This validates the source dialect and type assumptions only. Linking, target execution, and final map-file footprint remain consumer-owned checks.
 
-MISRA C:2023 analysis with `misch` runs in CI over `src/` and `include/`, and fails on any finding not recorded in the baseline in `analysis/baseline/`.
+MISRA C:2023 analysis with `misch` runs in CI over `src/` and `include/`, and fails on any finding not recorded in the baseline in `analysis/baseline/`. The version macros in `fxp.h` carry an inline deviation of Rule 2.5 (unused macro), because they exist for consumers and the library does not use them.

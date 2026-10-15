@@ -356,3 +356,25 @@ integrator_step(struct integrator *it, fxp_t error, bool *limited)
 ```
 
 With `ki` of 0.5, limits of ±100 and a constant error of 150, the output is 75 and then 100 with `*limited` set, and it leaves the limit as soon as the error changes sign.
+
+## Version
+
+`fxp.h` defines the release it belongs to, so a copied-in header still identifies itself:
+
+<!-- snippet: skip -->
+```c
+#define FXP_VERSION_MAJOR 0
+#define FXP_VERSION_MINOR 1
+#define FXP_VERSION_PATCH 0
+#define FXP_VERSION "0.1.0"
+```
+
+`FXP_VERSION_NUMBER` is `MAJOR * 10000 + MINOR * 100 + PATCH` as a `long`, so it holds any version where `int` is 16 bits. Compare it in the preprocessor to require a minimum release:
+
+```c
+#if FXP_VERSION_NUMBER < 100L
+#error "fxp 0.1.0 or later is required"
+#endif
+```
+
+`FXP_VERSION_STRING` is the same string as `FXP_VERSION`. `fxp_version.h` is a deprecated header that includes `fxp.h`, kept so existing includes compile until the next major release.
