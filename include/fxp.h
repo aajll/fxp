@@ -44,10 +44,6 @@
 #ifndef FXP_H_
 #define FXP_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /* ================ INCLUDES ================================================ */
 
 #include <stdbool.h>
@@ -306,10 +302,6 @@ int fxp_cmp(fxp_t a, fxp_t b);
  */
 enum fxp_status fxp_rescale(fxp_t a, uint_least8_t from_frac,
                             uint_least8_t to_frac, fxp_t *out);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* FXP_H_ */
 

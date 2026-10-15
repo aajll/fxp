@@ -16,10 +16,6 @@
 #ifndef FXP_CONVERT_H_
 #define FXP_CONVERT_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "fxp.h"
 
 /**
@@ -38,9 +34,5 @@ fxp_t fxp_from_double(double x, enum fxp_status *st);
  * @return @p a as a @c double.
  */
 double fxp_to_double(fxp_t a);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* FXP_CONVERT_H_ */
