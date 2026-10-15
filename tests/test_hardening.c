@@ -13,6 +13,7 @@
  */
 
 #include "fxp.h"
+#include "fxp_version.h"
 #include "test_fxp.h"
 
 /* ================ fxp_rescale domain / overflow ========================= */
@@ -132,6 +133,15 @@ TEST_CASE(test_acc_mac_chk_no_false_positive)
         TEST_ASSERT(fxp_acc_narrow_sat(acc) == FXP_INT(1));
 }
 
+/* The deprecated version header still exposes the macros from fxp.h. */
+TEST_CASE(test_version_macros)
+{
+        TEST_ASSERT(FXP_VERSION_NUMBER
+                    == ((FXP_VERSION_MAJOR * 10000L)
+                        + (FXP_VERSION_MINOR * 100L) + FXP_VERSION_PATCH));
+        TEST_ASSERT(FXP_VERSION_STRING[0] != '\0');
+}
+
 /* ================ RUNNER ================================================ */
 
 int
@@ -144,6 +154,7 @@ main(void)
         TEST_RUN(test_rescale_downscale);
         TEST_RUN(test_acc_mac_chk_overflow);
         TEST_RUN(test_acc_mac_chk_no_false_positive);
+        TEST_RUN(test_version_macros);
 
         (void)fprintf(stdout, "\n=== all edge-case tests passed ===\n\n");
         return EXIT_SUCCESS;

@@ -28,7 +28,7 @@ Add `include/fxp_convert.h` and `src/fxp_convert.c` only if you want the `double
 #include "fxp.h"
 ```
 
-`fxp_version.h` exists only in Meson builds.
+`fxp.h` defines the version macros described in [api.md](api.md#version).
 
 ## Meson subproject
 
@@ -59,8 +59,9 @@ The headers install to an `fxp/` subdirectory, and the `pkg-config` flags add th
 <!-- snippet: skip -->
 ```c
 #include "fxp.h"
-#include "fxp_version.h"
 ```
+
+`fxp_version.h` is installed beside it as a deprecated header that includes `fxp.h`.
 
 ## Configuration
 

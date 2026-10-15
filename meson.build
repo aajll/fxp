@@ -4,6 +4,7 @@ project(
   'fxp',
   'c',
   version: '0.1.0',
+  meson_version: '>=0.57.0',
   default_options: [
     'c_std=c11',
     'warning_level=3',
@@ -13,27 +14,29 @@ project(
 
 project_description = 'Portable fixed-point arithmetic kernel for embedded C'
 
-ver = meson.project_version().split('.')
-major = ver[0].to_int()
-minor = ver[1].to_int()
-patch = ver[2].to_int()
+# === Version ==================================================================
+# include/fxp.h defines the version macros, so a copy-in build has them.
+# Configuration fails when they differ from the project version.
 
-conf = configuration_data()
-conf.set_quoted('VERSION', meson.project_version())
-conf.set('MAJOR', major)
-conf.set('MINOR', minor)
-conf.set('PATCH', patch)
-
-generated_version_header = configure_file(
-  input: 'config' / 'fxp_version.h.in',
-  output: 'fxp_version.h',
-  configuration: conf,
-  install: true,
-  install_dir: get_option('includedir') / 'fxp',
-)
+fs = import('fs')
+version_parts = meson.project_version().split('.')
+version_macros = {
+  'FXP_VERSION_MAJOR': version_parts[0],
+  'FXP_VERSION_MINOR': version_parts[1],
+  'FXP_VERSION_PATCH': version_parts[2],
+  'FXP_VERSION': '"' + meson.project_version() + '"',
+}
+header_lines = []
+foreach line : fs.read('include' / 'fxp.h').split('\n')
+  header_lines += ' '.join(line.split())
+endforeach
+foreach name, value : version_macros
+  if '#define @0@ @1@'.format(name, value) not in header_lines
+    error('include/fxp.h must define @0@ as @1@'.format(name, value))
+  endif
+endforeach
 
 public_headers = include_directories('include')
-generated_headers = include_directories('.')
 
 # Core is strictly integer-only (no floating-point ABI). The optional
 # double<->fxp conversion helpers live in a separate translation unit so they
@@ -46,6 +49,7 @@ public_header_list = [
   'include/fxp_config.h',
   'include/fxp_const.h',
   'include/fxp_status.h',
+  'include/fxp_version.h',
 ]
 
 if get_option('with_convert')
@@ -56,7 +60,7 @@ endif
 fxp_lib = static_library(
   'fxp',
   library_sources,
-  include_directories: [public_headers, generated_headers],
+  include_directories: [public_headers],
   install: true,
 )
 
@@ -66,9 +70,8 @@ install_headers(
 )
 
 fxp_dep = declare_dependency(
-  include_directories: [public_headers, generated_headers],
+  include_directories: [public_headers],
   link_with: fxp_lib,
-  sources: generated_version_header,
 )
 
 meson.override_dependency('fxp', fxp_dep)

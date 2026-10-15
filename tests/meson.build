@@ -7,7 +7,7 @@ test_core = executable(
   'test_fxp',
   files('test_fxp.c'),
   dependencies: [fxp_dep],
-  include_directories: [public_headers, generated_headers],
+  include_directories: [public_headers],
 )
 test('core', test_core)
 
@@ -15,7 +15,7 @@ test_rounding = executable(
   'test_rounding',
   files('test_rounding.c'),
   dependencies: [fxp_dep],
-  include_directories: [public_headers, generated_headers],
+  include_directories: [public_headers],
 )
 test('rounding', test_rounding)
 
@@ -23,7 +23,7 @@ test_hardening = executable(
   'test_hardening',
   files('test_hardening.c'),
   dependencies: [fxp_dep],
-  include_directories: [public_headers, generated_headers],
+  include_directories: [public_headers],
 )
 test('hardening', test_hardening)
 
@@ -33,7 +33,7 @@ if get_option('with_convert')
     'test_convert',
     files('test_convert.c'),
     dependencies: [fxp_dep],
-    include_directories: [public_headers, generated_headers],
+    include_directories: [public_headers],
   )
   test('convert', test_convert)
 endif
@@ -45,7 +45,7 @@ fxp16_args = ['-DFXP_WORD_BITS=16', '-DFXP_FRAC_BITS=8']
 fxp16_lib = static_library(
   'fxp16',
   files('../src/fxp.c'),
-  include_directories: [public_headers, generated_headers],
+  include_directories: [public_headers],
   c_args: fxp16_args,
   install: false,
 )
@@ -53,7 +53,7 @@ test_format16 = executable(
   'test_format16',
   files('test_format16.c'),
   link_with: fxp16_lib,
-  include_directories: [public_headers, generated_headers],
+  include_directories: [public_headers],
   c_args: fxp16_args,
 )
 test('format16', test_format16)
@@ -64,7 +64,7 @@ test_rounding_modes = executable(
   'test_rounding_modes',
   files('test_rounding_modes.c'),
   dependencies: [fxp_dep],
-  include_directories: [public_headers, generated_headers],
+  include_directories: [public_headers],
 )
 test('rounding_modes_nearest_even', test_rounding_modes)
 
@@ -73,7 +73,7 @@ foreach mode : ['TRUNCATE', 'NEAREST_UP']
   mode_lib = static_library(
     'fxp_round_' + mode.to_lower(),
     files('../src/fxp.c'),
-    include_directories: [public_headers, generated_headers],
+    include_directories: [public_headers],
     c_args: mode_args,
     install: false,
   )
@@ -83,7 +83,7 @@ foreach mode : ['TRUNCATE', 'NEAREST_UP']
       'test_rounding_modes_' + mode.to_lower(),
       files('test_rounding_modes.c'),
       link_with: mode_lib,
-      include_directories: [public_headers, generated_headers],
+      include_directories: [public_headers],
       c_args: mode_args,
     ),
   )

@@ -57,6 +57,32 @@ extern "C" {
 #include "fxp_const.h"
 #include "fxp_status.h"
 
+/* ================ VERSION ================================================= */
+
+/**
+ * @name Version
+ * @brief Release of this header, for diagnostics and @c #if checks.
+ *
+ * @details
+ *    @c FXP_VERSION_NUMBER is @c MAJOR*10000 @c + @c MINOR*100
+ *    @c + @c PATCH with type @c long, so it cannot overflow where @c int is
+ *    16 bits. The Meson build fails to configure when these values differ
+ *    from the project version.
+ * @{
+ */
+/* cppcheck-suppress-begin misra-c2012-2.5 ; @deviation Public version macros
+ * for consumer diagnostics and #if checks; the library does not use them. */
+#define FXP_VERSION_MAJOR  0
+#define FXP_VERSION_MINOR  1
+#define FXP_VERSION_PATCH  0
+#define FXP_VERSION        "0.1.0"
+#define FXP_VERSION_STRING FXP_VERSION
+#define FXP_VERSION_NUMBER                                                     \
+        ((FXP_VERSION_MAJOR * 10000L) + (FXP_VERSION_MINOR * 100L)             \
+         + FXP_VERSION_PATCH)
+/* cppcheck-suppress-end misra-c2012-2.5 ; @deviation As above. */
+/** @} */
+
 /* ================ TYPEDEFS ================================================ */
 
 /**
