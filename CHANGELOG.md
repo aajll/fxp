@@ -24,6 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Removed
 
 - `fxp_version.h`. `fxp.h` defines the version macros.
+- The `extern "C"` guards in `fxp.h` and `fxp_convert.h`. The library is C11 only and its headers make no C++ claim.
 
 ### Fixed
 
