@@ -39,7 +39,7 @@ scripts/format.sh --fix    # rewrite in place
 
 ### 1.2 Notes
 
-- `include/fxp.h` defines the version macros, and `meson setup` fails when they differ from `project(version:)`, so a release updates both. `include/fxp_version.h` is a deprecated header that includes `fxp.h`.
+- `include/fxp.h` defines the version macros, and `meson setup` fails when they differ from `project(version:)`, so a release updates both.
 - The format and rounding are macros (`FXP_WORD_BITS`, `FXP_FRAC_BITS`, `FXP_ROUNDING`) with defaults in `fxp_conf.h`. The Meson options are `build_tests` and `with_convert`.
 - `tests/meson.build` builds extra cores: Q8.8 for `test_format16`, and one per non-default rounding mode for `test_rounding_modes`.
 

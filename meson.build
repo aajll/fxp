@@ -49,7 +49,6 @@ public_header_list = [
   'include/fxp_config.h',
   'include/fxp_const.h',
   'include/fxp_status.h',
-  'include/fxp_version.h',
 ]
 
 if get_option('with_convert')
