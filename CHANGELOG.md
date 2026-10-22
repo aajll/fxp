@@ -6,31 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
-### Added
-
-- CI runs MISRA C:2023 analysis with `misch` and fails on any finding outside the baseline recorded in `analysis/baseline/`.
-- `scripts/format.sh`, which pins the clang-format release and runs it with `uvx`. CI checks formatting through it.
-- The test suite builds the core under each rounding mode (`FXP_ROUND_TRUNCATE`, `FXP_ROUND_NEAREST_UP` and `FXP_ROUND_NEAREST_EVEN`) and checks every narrowing path against the expected result for ties, non-ties and exact values of both signs, with positive and negative divisors.
-
-### Changed
-
-- `fxp.h` defines `FXP_VERSION_MAJOR`, `_MINOR`, `_PATCH`, `FXP_VERSION`, `FXP_VERSION_STRING` and a new `FXP_VERSION_NUMBER` (`long`, `MAJOR * 10000 + MINOR * 100 + PATCH`), so a copied-in header carries its version. Meson fails to configure when the header and `project(version:)` disagree, and the build needs Meson 0.57 or later.
-- The README is a short landing page. `docs/integration.md`, `docs/api.md` and `docs/design.md` replace `docs/FXP_GUIDE.md`, and a test compiles every C example in the documentation.
-- CI installs Meson, Ninja and gcovr with `uv` instead of `pip` and `apt`.
-- CI gates line and branch coverage at 100 %, up from 80 % line and 70 % branch.
-- The zero-distance check in the internal shift-rounding helper is removed: every caller passes a positive distance. Results are unchanged.
-
-
-### Removed
-
-- `fxp_version.h`. `fxp.h` defines the version macros.
-- The `extern "C"` guards in `fxp.h` and `fxp_convert.h`. The library is C11 only and its headers make no C++ claim.
-
-### Fixed
-
-- `fxp_rescale` takes its fractional-bit counts as `uint_least8_t` instead of `uint8_t`, so the library compiles on targets with `CHAR_BIT == 16`, where C11 does not provide `uint8_t`. Where `uint8_t` exists the two are the same type, so callers need no change.
-
-## [0.1.0] - 2026-06-07
+## [0.1.0] - 2026-10-22
 
 Initial release. A portable, integer-only fixed-point arithmetic kernel.
 
@@ -48,5 +24,10 @@ Initial release. A portable, integer-only fixed-point arithmetic kernel.
 - Configuration invariants enforced with `_Static_assert` (including `FXP_FRAC_BITS < FXP_WORD_BITS-1` so `1.0` is always representable).
 - Full Doxygen contract annotations (`@pre`/`@post`/`@retval`/`@warning`) across the public API, including the required-`out` / NULL-tolerant pointer policy.
 - Unit-test suite (core, rounding consistency, edge cases, a 16-bit configuration build, and a double-oracle sweep) with ASan/UBSan, a coverage gate, and a float-free-core (nm) gate in CI.
+- `fxp.h` defines `FXP_VERSION_MAJOR`, `_MINOR`, `_PATCH`, `FXP_VERSION`, `FXP_VERSION_STRING` and `FXP_VERSION_NUMBER` (`long`, `MAJOR * 10000 + MINOR * 100 + PATCH`), so a copied-in header carries its version. Meson fails to configure when the header and `project(version:)` disagree, and the build needs Meson 0.57 or later.
+- The library compiles where `CHAR_BIT == 16`: `fxp_rescale` takes its fractional-bit counts as `uint_least8_t`, which is `uint8_t` wherever that type exists.
+- The test suite builds the core under each rounding mode (`FXP_ROUND_TRUNCATE`, `FXP_ROUND_NEAREST_UP` and `FXP_ROUND_NEAREST_EVEN`) and checks every narrowing path against the expected result for ties, non-ties and exact values of both signs, with positive and negative divisors.
+- CI gates line and branch coverage at 100 %, runs a MISRA C:2023 analysis with `misch` against the baseline in `analysis/baseline/`, checks formatting with the clang-format release pinned in `scripts/format.sh`, and installs its Python tools with `uv`.
+- A short README landing page, with the integration guide, API reference and design record in `docs/integration.md`, `docs/api.md` and `docs/design.md`, and a test that compiles every C example in the documentation.
 
 [0.1.0]: https://github.com/aajll/fxp/releases/tag/v0.1.0
